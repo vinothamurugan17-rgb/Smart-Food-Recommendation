@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -6,32 +7,23 @@ from langchain_core.prompts import ChatPromptTemplate
 load_dotenv()
 
 
-# Get Gemini API key from local .env
+# Get API key
 api_key = os.getenv("GEMINI_API_KEY")
 
-
-# Get Gemini API key from Streamlit Cloud Secrets
 if not api_key:
-    try:
-        import streamlit as st
-        api_key = st.secrets["GEMINI_API_KEY"]
-    except Exception:
-        pass
+    api_key = st.secrets.get("GEMINI_API_KEY")
 
 
-# Make sure the API key exists
 if not api_key:
     raise ValueError("GEMINI_API_KEY is not configured.")
 
 
-# Gemini model
 llm = ChatGoogleGenerativeAI(
     model="gemini-3.5-flash-lite",
     google_api_key=api_key
 )
 
 
-# Prompt for extracting food preferences
 prompt = ChatPromptTemplate.from_template("""
 You are a food preference extraction assistant.
 
@@ -89,7 +81,6 @@ def extract_preferences(user_input):
         content = text
 
     result = str(content).strip()
-
     result = result.replace("```", "").strip()
 
     parts = result.split("|")
