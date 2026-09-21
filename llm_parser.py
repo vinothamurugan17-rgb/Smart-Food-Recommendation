@@ -3,15 +3,28 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 
-# Load Gemini API key from .env
 load_dotenv()
 
-# Gemini model
+
+# Get Gemini API key from .env when running locally
+api_key = os.getenv("GEMINI_API_KEY")
+
+
+# Get Gemini API key from Streamlit Secrets when deployed
+if not api_key:
+    try:
+        import streamlit as st
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        api_key = None
+
+
 llm = ChatGoogleGenerativeAI(
-    model="gemini-3.5-flash-lite"
+    model="gemini-3.5-flash-lite",
+    google_api_key=api_key
 )
 
-# Prompt for extracting food preferences
+
 prompt = ChatPromptTemplate.from_template("""
 You are a food preference extraction assistant.
 
@@ -51,15 +64,12 @@ User request:
 
 def extract_preferences(user_input):
 
-    # Create LangChain messages
     messages = prompt.format_messages(
         user_input=user_input
     )
 
-    # Send request to Gemini through LangChain
     response = llm.invoke(messages)
 
-    # Gemini may return text as a string or a list
     content = response.content
 
     if isinstance(content, list):
@@ -72,11 +82,8 @@ def extract_preferences(user_input):
         content = text
 
     result = str(content).strip()
-
-    # Remove accidental code formatting if Gemini adds it
     result = result.replace("```", "").strip()
 
-    # Split the response
     parts = result.split("|")
 
     if len(parts) != 5:
@@ -84,7 +91,6 @@ def extract_preferences(user_input):
             f"Unexpected Gemini response: {result}"
         )
 
-    # Convert the extracted values into usable data
     return {
         "meal": parts[0].strip().lower(),
         "diet": parts[1].strip().lower(),
