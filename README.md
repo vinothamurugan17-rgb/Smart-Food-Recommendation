@@ -192,23 +192,23 @@ Thus, the project demonstrates how traditional Indian food knowledge can be repr
 
 **Smart Food Recommendation System**
 
-[GitHub Repository Link – add your repository link here]
+https://github.com/vinothamurugan17-rgb/Smart-Food-Recommendation
 
 ### Live Project
 
-[Streamlit Live Project Link – add your deployed application link here]
+https://smart-food-recommendation-vinotha.streamlit.app/
 
 ---
 
 ## Student Details
 
 **Student Name:** Vinotha Murugan
-**Roll Number:** [Enter Your Roll Number]
+**Roll Number:** 19063
 **Class:** TY BSc IT
 **Subject:** Indian Knowledge Systems (IKS)
 **College:** SIWS College
-**Academic Year:** [Enter Academic Year]
-**Faculty:** [Enter Faculty Name]
+**Academic Year:** 2026-27
+**Faculty:** Prathamesh Sir
 
 ---
 
